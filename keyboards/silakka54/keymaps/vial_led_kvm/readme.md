@@ -57,6 +57,21 @@ should pass. Vial passes only if the KVM gates by class and relays OUT reports.
 (Scroll Lock, Scroll Lock, 1/2) all work through the KVM keyboard port.
 Vial does **not** connect there; configure the keyboard on a regular USB port.
 
+## KVM switching keys
+
+Both KVM keymaps add three Vial custom keycodes (keycode picker → *User*):
+
+| Key     | Action |
+|---------|--------|
+| KVM Tgl | Alternate between KVM channel 1 and 2 |
+| KVM 1   | Switch to channel 1 |
+| KVM 2   | Switch to channel 2 |
+
+They send the UGREEN 50744 hotkey (Scroll Lock, Scroll Lock, `1`/`2`) with
+`KVM_TAP_DELAY_MS` (default 30 ms) between taps. The toggle assumes channel 1
+after power-up and does not know about switches made with the KVM button;
+if it gets out of sync, press it twice.
+
 ## Build
 
 As with the upstream releases, there are two variants depending on which
