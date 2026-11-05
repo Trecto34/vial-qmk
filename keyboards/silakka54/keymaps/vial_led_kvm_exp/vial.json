@@ -1,4 +1,9 @@
 {
+    "customKeycodes": [
+        {"name": "KVM\nTgl", "title": "KVM: toggle between channel 1 and 2", "shortName": "KVMTg"},
+        {"name": "KVM\n1", "title": "KVM: switch to channel 1", "shortName": "KVM1"},
+        {"name": "KVM\n2", "title": "KVM: switch to channel 2", "shortName": "KVM2"}
+    ],
     "matrix": {
         "rows": 10,
         "cols": 6

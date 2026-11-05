@@ -172,3 +172,47 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     rgb_render_state();
     return state;
 }
+
+// ---------------------------------------------------------------------------
+// KVM switching (UGREEN 50744: Scroll Lock, Scroll Lock, <channel number>)
+// Exposed in Vial as custom keycodes (see vial.json "customKeycodes").
+// The keyboard must be on the KVM's keyboard (USB 1.1) port so the KVM sees it.
+// ---------------------------------------------------------------------------
+enum kvm_keycodes {
+    KVM_TOGGLE = QK_KB_0, // alternate between channel 1 and 2
+    KVM_CH1,              // go to channel 1
+    KVM_CH2,              // go to channel 2
+};
+
+#ifndef KVM_TAP_DELAY_MS
+#    define KVM_TAP_DELAY_MS 30
+#endif
+
+static uint8_t kvm_channel = 1; // assumed channel after power-up
+
+static void kvm_switch_to(uint8_t channel) {
+    tap_code_delay(KC_SCRL, KVM_TAP_DELAY_MS);
+    wait_ms(KVM_TAP_DELAY_MS);
+    tap_code_delay(KC_SCRL, KVM_TAP_DELAY_MS);
+    wait_ms(KVM_TAP_DELAY_MS);
+    tap_code_delay(channel == 1 ? KC_1 : KC_2, KVM_TAP_DELAY_MS);
+    kvm_channel = channel;
+}
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    if (!record->event.pressed) {
+        return true;
+    }
+    switch (keycode) {
+        case KVM_TOGGLE:
+            kvm_switch_to(kvm_channel == 1 ? 2 : 1);
+            return false;
+        case KVM_CH1:
+            kvm_switch_to(1);
+            return false;
+        case KVM_CH2:
+            kvm_switch_to(2);
+            return false;
+    }
+    return true;
+}
