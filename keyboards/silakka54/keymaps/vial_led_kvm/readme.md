@@ -53,6 +53,10 @@ Uses three opt-in core options added to `tmk_core/protocol/usb_descriptor.*`:
 If the KVM gates by class *or* by endpoint number, mouse **and** media keys
 should pass. Vial passes only if the KVM gates by class and relays OUT reports.
 
+**Tested on UGREEN 50744:** mouse keys, media keys, LEDs and the KVM hotkey
+(Scroll Lock, Scroll Lock, 1/2) all work through the KVM keyboard port.
+Vial does **not** connect there; configure the keyboard on a regular USB port.
+
 ## Build
 
     make silakka54:vial_led_kvm
