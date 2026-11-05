@@ -59,8 +59,17 @@ Vial does **not** connect there; configure the keyboard on a regular USB port.
 
 ## Build
 
-    make silakka54:vial_led_kvm
-    make silakka54:vial_led_kvm_exp
+As with the upstream releases, there are two variants depending on which
+half the USB cable is plugged into:
 
-Flash the `.uf2` to **both** halves (RP2040 bootloader → `RPI-RP2`), then
-restore the layout (`.vil`) in Vial.
+    # USB on the left half  -> *_LEFT.uf2
+    make silakka54:vial_led_kvm_exp EXTRAFLAGS=-DMASTER_LEFT
+
+    # USB on the right half -> *_RIGHT.uf2
+    make silakka54:vial_led_kvm_exp EXTRAFLAGS=-DMASTER_RIGHT
+
+(same for `vial_led_kvm`). Run `make clean` or remove `.build/obj_*` between
+the two builds, since changing `EXTRAFLAGS` does not trigger a rebuild.
+
+Flash the **same** file to **both** halves (RP2040 bootloader → `RPI-RP2`),
+then restore the layout (`.vil`) in Vial.
