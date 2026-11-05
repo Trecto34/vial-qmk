@@ -218,6 +218,12 @@ enum usb_endpoints {
 #    define MOUSE_IN_EPNUM SHARED_IN_EPNUM
 #endif
 
+// KVM_SHARED_EP_BEFORE_RAW: allocate the shared endpoint right after the
+// keyboard/mouse ones (e.g. EP2), for KVMs that only relay low endpoints.
+#if defined(SHARED_EP_ENABLE) && defined(KVM_SHARED_EP_BEFORE_RAW)
+    SHARED_IN_EPNUM = NEXT_EPNUM,
+#endif
+
 #ifdef RAW_ENABLE
     RAW_IN_EPNUM = NEXT_EPNUM,
 #    ifdef USB_ENDPOINTS_ARE_REORDERABLE
@@ -227,7 +233,7 @@ enum usb_endpoints {
 #    endif
 #endif
 
-#ifdef SHARED_EP_ENABLE
+#if defined(SHARED_EP_ENABLE) && !defined(KVM_SHARED_EP_BEFORE_RAW)
     SHARED_IN_EPNUM = NEXT_EPNUM,
 #endif
 

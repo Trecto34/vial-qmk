@@ -601,8 +601,14 @@ const USB_Descriptor_Configuration_t PROGMEM ConfigurationDescriptor = {
         .AlternateSetting       = 0x00,
         .TotalEndpoints         = 2,
         .Class                  = HID_CSCP_HIDClass,
+#    ifdef KVM_RAW_BOOT_KEYBOARD
+        // Advertise as boot keyboard so KVMs that only relay boot interfaces pass it
+        .SubClass               = HID_CSCP_BootSubclass,
+        .Protocol               = HID_CSCP_KeyboardBootProtocol,
+#    else
         .SubClass               = HID_CSCP_NonBootSubclass,
         .Protocol               = HID_CSCP_NonBootProtocol,
+#    endif
         .InterfaceStrIndex      = NO_DESCRIPTOR
     },
     .Raw_HID = {
@@ -694,6 +700,10 @@ const USB_Descriptor_Configuration_t PROGMEM ConfigurationDescriptor = {
 #    ifdef KEYBOARD_SHARED_EP
         .SubClass               = HID_CSCP_BootSubclass,
         .Protocol               = HID_CSCP_KeyboardBootProtocol,
+#    elif defined(KVM_SHARED_EP_BOOT_MOUSE)
+        // Advertise as boot mouse so KVMs that only relay boot interfaces pass it
+        .SubClass               = HID_CSCP_BootSubclass,
+        .Protocol               = HID_CSCP_MouseBootProtocol,
 #    else
         .SubClass               = HID_CSCP_NonBootSubclass,
         .Protocol               = HID_CSCP_NonBootProtocol,
